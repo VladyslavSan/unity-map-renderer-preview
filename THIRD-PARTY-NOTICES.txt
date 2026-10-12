@@ -1,0 +1,261 @@
+THIRD-PARTY NOTICES
+===================
+
+unity-map-renderer is dual-licensed: PolyForm Noncommercial 1.0.0 (LICENSE.md) for non-commercial use,
+a separate commercial licence otherwise. The items below are third-party
+materials included with or referenced by this project, with their respective licenses.
+
+CODE
+----
+
+Unity Universal Render Pipeline (URP) shader source — verbatim reference template + derivatives
+  Source: com.unity.render-pipelines.universal version 17.5.0 (package hash 0c18adc4ff89), as
+  shipped with Unity 6000.5.0f1. Copyright © 2020 Unity Technologies ApS.
+  Licensed under the Unity Companion License for Unity-dependent projects.
+  License text: Assets/Code/ThirdParty/UnityCompanionLicense.txt
+  Online:       http://www.unity3d.com/legal/licenses/Unity_Companion_License
+  The Unity Companion License is NOT copyleft — it does not affect our proprietary code; only the
+  copied/derived files listed below are subject to the UCL terms.
+
+  (a) Verbatim reference template — Assets/Code/MapRenderer.Unity/Shaders/Unity/Lit/
+      Unmodified copies of the URP Lit shader set, vendored as a diff baseline so our map shaders
+      can be audited as a minimal delta against stock Lit. The ONLY changes from upstream are the
+      shader name (Universal Render Pipeline/Lit → Template/UnityLit) and include paths (rewritten
+      to local-relative). Reference-only; bound to no material at runtime.
+      See Assets/Code/MapRenderer.Unity/Shaders/Unity/Lit/README.md for provenance + refresh procedure.
+
+        UnityLit.shader              ← Lit.shader
+        LitInput.hlsl                ← LitInput.hlsl
+        LitForwardPass.hlsl          ← LitForwardPass.hlsl
+        LitGBufferPass.hlsl          ← LitGBufferPass.hlsl
+        ShadowCasterPass.hlsl        ← ShadowCasterPass.hlsl
+        DepthOnlyPass.hlsl           ← DepthOnlyPass.hlsl
+        DepthNormalsPass.hlsl        ← DepthNormalsPass.hlsl
+        LitDepthNormalsPass.hlsl     ← LitDepthNormalsPass.hlsl
+        LitMetaPass.hlsl             ← LitMetaPass.hlsl
+
+      Verbatim reference template (Unlit) — Assets/Code/MapRenderer.Unity/Shaders/Unity/Unlit/
+      Copies of the URP Unlit shader set, vendored as the diff baseline for the planned GPU-cheap
+      Unlit map-shader variant (see docs/meshing-design.md §3 "Unlit variant"). Same provenance,
+      version, and UCL terms as the Lit set above. As with the Lit template, the ONLY changes from
+      upstream are the shader name (Universal Render Pipeline/Unlit → Template/UnityUnlit) and the
+      includes that resolve to a local sibling copy (rewritten to local-relative); DepthOnlyPass.hlsl
+      is not Unlit-specific and is not copied here. Reference-only; bound to no material at runtime.
+      See Assets/Code/MapRenderer.Unity/Shaders/Unity/Unlit/README.md for provenance + refresh procedure.
+
+        Unlit.shader                 ← Unlit.shader
+        UnlitInput.hlsl              ← UnlitInput.hlsl
+        UnlitForwardPass.hlsl        ← UnlitForwardPass.hlsl
+        UnlitGBufferPass.hlsl        ← UnlitGBufferPass.hlsl
+        UnlitDepthNormalsPass.hlsl   ← UnlitDepthNormalsPass.hlsl
+        UnlitMetaPass.hlsl           ← UnlitMetaPass.hlsl
+
+  (b) Editable derivatives (verbatim-plus-delta) — Assets/Code/MapRenderer.Unity/Shaders/Map/
+      Each is a mirror-copy of a URP source file plus map-specific deltas (paint + tweakable
+      render-state properties, the MapVertexModify / line-extrusion hook, coverage/alpha). Each
+      carries a UCL attribution header documenting its delta from upstream.
+
+        Map/Fill/Fill.shader                 ← Lit.shader
+        Map/Fill/Fill_LitInput.hlsl          ← LitInput.hlsl
+        Map/Fill/Fill_LitForwardPass.hlsl    ← LitForwardPass.hlsl
+        Map/Fill/Fill_LitGBufferPass.hlsl    ← LitGBufferPass.hlsl
+        Map/Fill/Fill_ShadowCasterPass.hlsl  ← ShadowCasterPass.hlsl
+        Map/Fill/Fill_DepthOnlyPass.hlsl     ← DepthOnlyPass.hlsl
+        Map/Fill/Fill_DepthNormalsPass.hlsl  ← LitDepthNormalsPass.hlsl
+        Map/Fill/FillUnlit.shader            ← Unlit.shader
+        Map/Fill/Fill_UnlitInput.hlsl        ← UnlitInput.hlsl
+        Map/Fill/Fill_UnlitForwardPass.hlsl  ← UnlitForwardPass.hlsl
+        Map/Line/Line.shader                 ← Lit.shader
+        Map/Line/Line_LitInput.hlsl          ← LitInput.hlsl
+        Map/Line/Line_LitForwardPass.hlsl    ← LitForwardPass.hlsl
+        Map/Line/Line_LitGBufferPass.hlsl    ← LitGBufferPass.hlsl
+        Map/Line/Line_ShadowCasterPass.hlsl  ← ShadowCasterPass.hlsl
+        Map/Line/Line_DepthOnlyPass.hlsl     ← DepthOnlyPass.hlsl
+        Map/Line/Line_DepthNormalsPass.hlsl  ← LitDepthNormalsPass.hlsl
+        Map/Line/LineUnlit.shader            ← Unlit.shader
+        Map/Line/Line_UnlitInput.hlsl        ← UnlitInput.hlsl
+        Map/Line/Line_UnlitForwardPass.hlsl  ← UnlitForwardPass.hlsl
+        Map/FillExtrusion/FillExtrusion.shader                 ← Lit.shader
+        Map/FillExtrusion/FillExtrusion_LitInput.hlsl          ← LitInput.hlsl
+        Map/FillExtrusion/FillExtrusion_LitForwardPass.hlsl    ← LitForwardPass.hlsl
+        Map/FillExtrusion/FillExtrusion_LitGBufferPass.hlsl    ← LitGBufferPass.hlsl
+        Map/FillExtrusion/FillExtrusion_ShadowCasterPass.hlsl  ← ShadowCasterPass.hlsl
+        Map/FillExtrusion/FillExtrusion_DepthOnlyPass.hlsl     ← DepthOnlyPass.hlsl
+        Map/FillExtrusion/FillExtrusion_DepthNormalsPass.hlsl  ← LitDepthNormalsPass.hlsl
+        Map/FillExtrusion/FillExtrusionUnlit.shader            ← Unlit.shader
+        Map/FillExtrusion/FillExtrusion_UnlitInput.hlsl        ← UnlitInput.hlsl
+        Map/FillExtrusion/FillExtrusion_UnlitForwardPass.hlsl  ← UnlitForwardPass.hlsl
+        Common/LitInput.Template.hlsl        ← LitInput.hlsl (Map-flavoured skeleton template; S66)
+
+  (c) Bespoke map helpers — original clean-room work, NOT Unity-derived; listed here only so the
+      shader tree's provenance is unambiguous:
+        Map/Line/Line_VertexExtrude.hlsl              — world-space ribbon extrusion + line coverage
+        Map/Fill/Fill_VertexModify.hlsl                — fill vertex hook
+        Map/FillExtrusion/FillExtrusion_VertexModify.hlsl — fill-extrusion height extrusion + translate hook (S23 I2b)
+        Map/PixelsToWorld.hlsl                         — shared px→world measurement (S23 I2a)
+
+Fill triangulation is a clean-room implementation of the ear-clipping algorithm. The Mapbox
+"earcut" project (ISC) was consulted only as an algorithm reference; no source was copied.
+
+UniTask 2.5.10 — Cysharp/UniTask
+  Vendored source: Assets/Code/ThirdParty/UniTask/Runtime/ (committed, version-pinned, self-contained).
+  NuGet reference (headless dotnet test): UniTask 2.5.10 via Tools/core-tests/core-tests.csproj.
+  Both distributions pinned to the same tag so the in-Editor and headless builds cannot drift on API.
+  Author: Yoshifumi Kawai (Cysharp, Inc.)
+  Repository: https://github.com/Cysharp/UniTask
+  License: MIT
+  SPDX-License-Identifier: MIT
+
+  MIT License
+  Copyright (c) 2019 Yoshifumi Kawai / Cysharp, Inc.
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+  and associated documentation files (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge, publish, distribute,
+  sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all copies or
+  substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+coi-serviceworker 0.1.7 — gzuidhof/coi-serviceworker
+  Hosting glue, not part of the renderer: a service worker that adds the COOP/COEP headers a GitHub Pages web
+  player needs. Vendored source: Assets/Code/ThirdParty/coi-serviceworker~/ (the trailing ~ keeps Unity from
+  importing it). Tools/publish-preview.sh copies it into the Pages players.
+  Author: Guido Zuidhof and contributors
+  Repository: https://github.com/gzuidhof/coi-serviceworker
+  License: MIT, Copyright (c) 2021 Guido Zuidhof (full text in Assets/Code/ThirdParty/coi-serviceworker~/LICENSE)
+  SPDX-License-Identifier: MIT
+
+DATA / TEST FIXTURES
+--------------------
+No OpenStreetMap-derived tile data is stored in this repository. The Online tests fetch real tiles at run time from OpenFreeMap
+(see LIVE NETWORK ENDPOINT below) or from the separate test-tile repository, which carries the ODbL 1.0 licence and attribution, and
+keep them in a git-ignored cache. A few test arms carry insubstantial coordinate extracts reduced from real water and park polygons.
+
+Assets/Fixtures/sample-tile.bytes
+  A single Mapbox Vector Tile (z0/x0/y0) from the MapLibre "demotiles" dataset.
+  Underlying geometry: Natural Earth — public domain (no attribution required).
+  Sources: https://demotiles.maplibre.org/  •  https://www.naturalearthdata.com/
+  Bundled as an offline, deterministic test fixture.
+
+Assets/Fixtures/maplibre-demo-style.json
+  A MapLibre GL JS style document describing the "demotiles" basemap.
+  Committed as the demo style for MapDemo.unity (S40) and as a test fixture
+  for the styled-fill pipeline (MapViewStyledFillTests).
+  Underlying data: Natural Earth — public domain (no attribution required).
+  Source: https://demotiles.maplibre.org/style.json
+  License: the style JSON itself is considered data/configuration, not a
+  copyrighted work under MapLibre's Apache-2.0 license (which applies to
+  MapLibre GL JS source code, not the style schemas or Natural Earth data).
+
+Assets/StreamingAssets/Fixtures/liberty.json
+  The OpenFreeMap "Liberty" MapLibre GL style document (spec version 8), committed as the demo basemap
+  style and as a parser/pipeline test fixture (TileJsonTests, GlobeLineWindingTests,
+  RightHandedSphereProjectionWindingTests, BoundaryGlitchMeshTests). Pretty-printed from the upstream
+  single-line original; the content is otherwise unmodified.
+  Source:  OpenFreeMap — https://openfreemap.org/  •  https://github.com/hyperknot/openfreemap
+  Project license: MIT — Copyright (c) 2023 Zsolt Ero. (LICENSE.md:
+    https://github.com/hyperknot/openfreemap/blob/main/LICENSE.md)
+  The Liberty style design (a fork of OSM Liberty, tracing back to OSM Bright / Mapbox Open Styles) and
+  the OpenMapTiles schema it targets are BSD-3-Clause (code) + CC BY 4.0 (design). The style references
+  live OpenFreeMap endpoints for vector tiles, raster hillshade, sprites, and glyphs (see LIVE NETWORK
+  ENDPOINT below).
+
+  REQUIRED ATTRIBUTION — non-MapLibre clients (and any printed media / video) MUST display:
+      OpenFreeMap © OpenMapTiles Data from OpenStreetMap
+  (MapLibre GL adds it automatically; other renderers must add it themselves.) Underlying map data
+  © OpenStreetMap contributors — https://www.openstreetmap.org/copyright. The raster hillshade source
+  is Natural Earth (public domain).
+
+Assets/StreamingAssets/Fixtures/liberty-night.json
+  A night variant of the OpenFreeMap "Liberty" style above, made in this repository: Liberty with darkened
+  colours, plus added top-level "light" and "sky" blocks.
+  Same source, licences and attribution as liberty.json.
+
+Assets/Fixtures/glyphs/NotoSansRegular/*.pbf.bytes
+  (0-255.pbf.bytes, 1536-1791.pbf.bytes, 64256-64511.pbf.bytes, 65024-65279.pbf.bytes)
+  Pre-baked SDF glyph-bitmap ranges for the "Noto Sans Regular, ..." font stack, fetched from
+  MapLibre's public "demotiles" glyph endpoint (S18 — glyph-atlas/SDF text rendering).
+  Underlying font: Noto (multiple faces in the stack) — SIL Open Font License 1.1 (OFL-1.1).
+  Fetch endpoint: https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf
+  Bundled as an offline, deterministic test fixture (glyph-PBF decode: GlyphPbfDecodeTests / T2).
+  License: the OFL applies to the Noto font data the SDF bitmaps are derived from; the OFL text
+  is available at https://scripts.sil.org/OFL — no copyleft on our own code (font data is not
+  linked/derivative in the copyleft sense; it is bundled as data, per OFL §1/§2 permitted use).
+
+Unicode Character Database (UCD) — derived tables and a conformance fixture
+  Files: DerivedBidiClass.txt, BidiBrackets.txt, BidiMirroring.txt, BidiCharacterTest.txt (Unicode 18.0.0),
+  from https://www.unicode.org/Public/UCD/latest/ucd/. Copyright (c) Unicode, Inc.
+  Used in: Assets/Code/MapRenderer.Unity/Text/Bidi/UnicodeBidiData.g.cs (tables generated by
+  Tools/generate-bidi-tables.py), Assets/Fixtures/bidi-character-test-subset.txt (a sample of
+  BidiCharacterTest.txt), and Assets/Code/MapRenderer.Unity/Text/ArabicJoining.cs (ArabicShaping.txt and
+  UnicodeData.txt). The raw UCD files are not committed.
+  License: Unicode License v3 (https://www.unicode.org/license.txt), reproduced in full because the fixture is a
+  partial copy of a Data File:
+
+    UNICODE LICENSE V3
+
+    COPYRIGHT AND PERMISSION NOTICE
+
+    Copyright © 1991-2026 Unicode, Inc.
+
+    NOTICE TO USER: Carefully read the following legal agreement. BY
+    DOWNLOADING, INSTALLING, COPYING OR OTHERWISE USING DATA FILES, AND/OR
+    SOFTWARE, YOU UNEQUIVOCALLY ACCEPT, AND AGREE TO BE BOUND BY, ALL OF THE
+    TERMS AND CONDITIONS OF THIS AGREEMENT. IF YOU DO NOT AGREE, DO NOT
+    DOWNLOAD, INSTALL, COPY, DISTRIBUTE OR USE THE DATA FILES OR SOFTWARE.
+
+    Permission is hereby granted, free of charge, to any person obtaining a
+    copy of data files and any associated documentation (the "Data Files") or
+    software and any associated documentation (the "Software") to deal in the
+    Data Files or Software without restriction, including without limitation
+    the rights to use, copy, modify, merge, publish, distribute, and/or sell
+    copies of the Data Files or Software, and to permit persons to whom the
+    Data Files or Software are furnished to do so, provided that either (a)
+    this copyright and permission notice appear with all copies of the Data
+    Files or Software, or (b) this copyright and permission notice appear in
+    associated Documentation.
+
+    THE DATA FILES AND SOFTWARE ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+    KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF
+    THIRD PARTY RIGHTS.
+
+    IN NO EVENT SHALL THE COPYRIGHT HOLDER OR HOLDERS INCLUDED IN THIS NOTICE
+    BE LIABLE FOR ANY CLAIM, OR ANY SPECIAL INDIRECT OR CONSEQUENTIAL DAMAGES,
+    OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+    WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+    ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THE DATA
+    FILES OR SOFTWARE.
+
+    Except as contained in this notice, the name of a copyright holder shall
+    not be used in advertising or otherwise to promote the sale, use or other
+    dealings in these Data Files or Software without prior written
+    authorization of the copyright holder.
+
+LIVE NETWORK ENDPOINT (runtime only)
+-------------------------------------
+https://demotiles.maplibre.org/tiles/{z}/{x}/{y}.pbf
+  The MapLibre demotiles vector tile endpoint used by MapViewBootstrap at runtime.
+  Fetched over HTTP only when the MapDemo.unity scene is run in Play mode. This is a free public endpoint.
+  Underlying geometry: Natural Earth — public domain (no attribution required).
+  Endpoint maintained by: MapLibre contributors.
+  Subject to the endpoint's terms of service and fair-use policy.
+
+https://tiles.openfreemap.org/  (vector planet, natural_earth raster, sprites, fonts)
+  The OpenFreeMap tile / sprite / glyph endpoints referenced by
+  Assets/StreamingAssets/Fixtures/liberty.json, fetched at runtime when the demo renders the Liberty
+  basemap, and by the Online tests (the pinned planet build).
+    - Vector tiles:  https://tiles.openfreemap.org/planet                          (OpenMapTiles schema; data © OpenStreetMap)
+    - Raster shade:  https://tiles.openfreemap.org/natural_earth/ne2sr/{z}/{x}/{y}.png   (Natural Earth — public domain)
+    - Sprites:       https://tiles.openfreemap.org/sprites/ofm_f384/ofm
+    - Glyphs/fonts:  https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf        (Noto Sans — SIL OFL-1.1)
+  Provider: OpenFreeMap — MIT, © 2023 Zsolt Ero. Free public endpoint; subject to its terms / fair-use.
+  Required attribution: "OpenFreeMap © OpenMapTiles Data from OpenStreetMap".

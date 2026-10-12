@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>unity-map-renderer: vector maps in Unity, live in the browser</title>
+  <meta name="description" content="A Unity-native renderer for MapLibre styles and vector tiles: 3D buildings, labels, globe and Mercator, sky and sun. Try it in the browser on WebGPU.">
+  <link rel="canonical" href="https://vladyslavsan.github.io/unity-map-renderer-preview/">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0c1220">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="unity-map-renderer">
+  <meta property="og:title" content="unity-map-renderer: vector maps in Unity, live in the browser">
+  <meta property="og:description" content="A Unity-native renderer for MapLibre styles and vector tiles: 3D buildings, labels, globe and Mercator, sky and sun. Try it in the browser on WebGPU.">
+  <meta property="og:url" content="https://vladyslavsan.github.io/unity-map-renderer-preview/">
+  <meta property="og:image" content="https://vladyslavsan.github.io/unity-map-renderer-preview/og.png?v=2">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="unity-map-renderer: Berlin in 3D, with buildings, shadows and map labels, rendered in the browser">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="unity-map-renderer: vector maps in Unity, live in the browser">
+  <meta name="twitter:description" content="A Unity-native renderer for MapLibre styles and vector tiles. Try it in the browser on WebGPU.">
+  <meta name="twitter:image" content="https://vladyslavsan.github.io/unity-map-renderer-preview/og.png?v=2">
+  <meta name="twitter:image:alt" content="unity-map-renderer: Berlin in 3D, with buildings, shadows and map labels, rendered in the browser">
+
+  <meta name="tdm-reservation" content="1">
+  <meta name="tdm-policy" content="https://vladyslavsan.github.io/unity-map-renderer-preview/NOTICE.md">
+
+  <style>
+    :root {
+      --bg: #f6f8fb; --surface: #ffffff; --text: #141b29; --muted: #4a5568; --line: #d9dee7;
+      --accent: #0b5fc4; --accent-text: #ffffff; --code: #eef2f7;
+      --hero-bg: linear-gradient(160deg, #0c1220 0%, #16223a 100%); --hero-text: #f0f4fa; --hero-muted: #c4cede;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0c1220; --surface: #131c2e; --text: #e8edf5; --muted: #a8b4c7; --line: #26324a;
+        --accent: #6eb4ff; --accent-text: #0c1220; --code: #1b2638;
+      }
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    a { color: var(--accent); }
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+    .wrap { max-width: 64rem; margin: 0 auto; padding: 0 1.25rem; }
+    .skip { position: absolute; left: -999px; }
+    .skip:focus { left: 1rem; top: 1rem; background: var(--surface); padding: .5rem 1rem; z-index: 1; }
+
+    header.hero { background: var(--hero-bg); color: var(--hero-text); }
+    .hero .wrap { display: grid; grid-template-columns: 1.1fr 1fr; gap: 2.5rem; align-items: center; padding-top: 4rem; padding-bottom: 4rem; }
+    .eyebrow { display: inline-block; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: #6eb4ff; font-weight: 600; margin: 0 0 .75rem; }
+    h1 { font-size: clamp(2.1rem, 5vw, 3.3rem); line-height: 1.1; margin: 0 0 1rem; letter-spacing: -.02em; overflow-wrap: anywhere; }
+    .pitch { font-size: 1.2rem; color: var(--hero-muted); margin: 0 0 2rem; max-width: 34rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: .9rem; margin-bottom: 1.25rem; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 3.25rem; padding: 0 1.6rem;
+      border-radius: 10px; font-weight: 650; font-size: 1.05rem; text-decoration: none; border: 2px solid transparent;
+    }
+    .btn.primary { background: #6eb4ff; color: #0c1220; }
+    .btn.primary:hover { background: #93c7ff; }
+    .btn.secondary { border-color: #6eb4ff; color: #e8f2ff; }
+    .btn.secondary:hover { background: rgba(110, 180, 255, .14); }
+    .hero .btn:focus-visible { outline-color: #ffffff; }
+    .hero .note { font-size: .92rem; color: var(--hero-muted); margin: 0; max-width: 34rem; }
+    .hero img { width: 100%; height: auto; border-radius: 14px; box-shadow: 0 20px 50px rgba(0, 0, 0, .45); display: block; }
+
+    main section { padding: 3rem 0 .5rem; }
+    h2 { font-size: 1.6rem; margin: 0 0 1.25rem; letter-spacing: -.01em; }
+    .features { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; }
+    .features li { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1.1rem 1.25rem; }
+    .features strong { display: block; margin-bottom: .25rem; }
+    .features span { color: var(--muted); font-size: .97rem; }
+
+    .req { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1.1rem 1.5rem; }
+    .req p { margin: 0; }
+    .req ul { margin: .5rem 0 0; padding-left: 1.2rem; }
+    .req li { margin: .3rem 0; }
+
+    .style-row { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: .9rem; }
+    .style-row h3 { margin: 0 0 .5rem; font-size: 1.05rem; }
+    .copy-line { display: flex; gap: .6rem; align-items: stretch; }
+    code { font: .88em/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .copy-line code {
+      flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; background: var(--code); border-radius: 8px;
+      padding: .55rem .75rem;
+    }
+    .copy-line button {
+      flex: none; min-width: 5.5rem; border: 0; border-radius: 8px; background: var(--accent); color: var(--accent-text);
+      font: inherit; font-weight: 600; font-size: .95rem; cursor: pointer; padding: 0 1rem;
+    }
+    .style-row p { margin: .5rem 0 0; color: var(--muted); font-size: .95rem; }
+    .muted { color: var(--muted); }
+
+    footer { margin-top: 3.5rem; border-top: 1px solid var(--line); padding: 2rem 0 3rem; font-size: .93rem; color: var(--muted); }
+    footer p { margin: 0 0 .8rem; }
+    footer .attribution { color: var(--text); font-weight: 600; }
+
+    @media (max-width: 760px) {
+      .hero .wrap { grid-template-columns: 1fr; padding-top: 2.5rem; padding-bottom: 2.5rem; gap: 2rem; }
+      .actions .btn { flex: 1 1 100%; }
+      .copy-line { flex-direction: column; }
+      .copy-line button { min-height: 2.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Public preview</p>
+        <h1>unity-map-renderer</h1>
+        <p class="pitch">A Unity-native renderer for MapLibre-style vector maps, built on Burst and the job system. This preview runs it in your browser on WebGPU.</p>
+        <div class="actions">
+          <a class="btn primary" href="play/">Open the map</a>
+          <a class="btn secondary" href="flythrough/">Watch the flythrough</a>
+        </div>
+        <p class="note">Each player downloads about 18&nbsp;MB. On the first visit the page installs a service worker and reloads once.</p>
+      </div>
+      <img src="hero.png" width="960" height="504" alt="The flythrough player: central Berlin in 3D, with extruded buildings, their shadows, street and place labels, and the Tiergarten.">
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <section aria-labelledby="features">
+      <h2 id="features">What it does</h2>
+      <ul class="features">
+        <li><strong>MapLibre styles, vector tiles</strong><span>Reads MapLibre style JSON and Mapbox Vector Tiles: background, fill, line, symbol and fill-extrusion layers, with expressions and filters.</span></li>
+        <li><strong>3D buildings</strong><span>Fill-extrusion buildings with sun shadows and ambient occlusion.</span></li>
+        <li><strong>Labels</strong><span>Text and icon symbols at points and along lines, placed with collision detection every frame.</span></li>
+        <li><strong>Globe and Mercator</strong><span>The same map on a globe or on a flat Web Mercator plane.</span></li>
+        <li><strong>Sky, sun and time of day</strong><span>Sky and fog from the style, and a sun whose position follows the time of day. Liberty Night is a night variant of the style.</span></li>
+        <li><strong>Unity-native, data-oriented</strong><span>Tile decode and meshing run as Burst jobs. Tiles draw through Entities, BatchRendererGroup or GameObjects.</span></li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="browsers">
+      <h2 id="browsers">Browser requirements</h2>
+      <div class="req">
+        <p>The players need <strong>WebGPU</strong> and a reasonably capable GPU.</p>
+        <ul>
+          <li><strong>Recommended:</strong> a current Chrome or Edge on a desktop computer.</li>
+          <li>Safari 26 and newer, and Firefox where it has WebGPU on, may also work.</li>
+          <li>Chrome and Firefox on Linux do not turn WebGPU on by default today.</li>
+          <li>Phones and tablets are not a target of this preview.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="styles">
+      <h2 id="styles">Use the styles</h2>
+      <p class="muted">The two styles the players use, as raw MapLibre style JSON. They load tiles, sprites and glyphs from OpenFreeMap.</p>
+      <div class="style-row">
+        <h3>Liberty</h3>
+        <div class="copy-line">
+          <code id="url-liberty">https://raw.githubusercontent.com/VladyslavSan/unity-map-renderer-preview/main/styles/liberty.json</code>
+          <button type="button" data-copy="url-liberty" aria-label="Copy the Liberty style URL">Copy</button>
+        </div>
+        <p>The OpenFreeMap Liberty style, unmodified.</p>
+      </div>
+      <div class="style-row">
+        <h3>Liberty Night</h3>
+        <div class="copy-line">
+          <code id="url-night">https://raw.githubusercontent.com/VladyslavSan/unity-map-renderer-preview/main/styles/liberty-night.json</code>
+          <button type="button" data-copy="url-night" aria-label="Copy the Liberty Night style URL">Copy</button>
+        </div>
+        <p>Liberty with darker colours and top-level <code>light</code> and <code>sky</code> blocks, made for this renderer.</p>
+      </div>
+      <p class="muted" role="status" aria-live="polite" id="copy-status"></p>
+    </section>
+  </main>
+
+  <div class="wrap">
+    <footer>
+      <p class="attribution">
+        <a href="https://openfreemap.org/">OpenFreeMap</a>
+        <a href="https://www.openmaptiles.org/">© OpenMapTiles</a>
+        Data from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
+      </p>
+      <p>The renderer is <strong>source-available, not open source</strong>. The players are licensed under the
+        <a href="LICENSE.md">PolyForm Noncommercial License 1.0.0</a>. Commercial use needs a separate commercial
+        licence. Text and data mining rights are reserved, and training a machine-learning model for a commercial
+        entity needs the commercial licence: see <a href="NOTICE.md">NOTICE.md</a>. The renderer's source code is private.</p>
+      <p><strong>Commercial licensing:</strong> <a href="mailto:vladyslav.odobesku@gmail.com">vladyslav.odobesku@gmail.com</a></p>
+      <p>Styles: OpenFreeMap, <a href="https://github.com/hyperknot/openfreemap/blob/main/LICENSE.md">MIT</a>.
+        The Liberty design (from OSM Liberty and OSM Bright): BSD-3-Clause code, CC BY 4.0 design.
+        Hillshade: Natural Earth (public domain). <a href="THIRD-PARTY-NOTICES.txt">Third-party notices</a>.
+        Hosting: <a href="vendor/coi-serviceworker/LICENSE">coi-serviceworker</a> (MIT).</p>
+      <p><a href="https://github.com/VladyslavSan/unity-map-renderer-preview">This site on GitHub</a><span id="version"></span></p>
+    </footer>
+  </div>
+
+  <script>
+    for (const button of document.querySelectorAll("button[data-copy]")) {
+      button.addEventListener("click", async () => {
+        const source = document.getElementById(button.dataset.copy);
+        const status = document.getElementById("copy-status");
+        try {
+          await navigator.clipboard.writeText(source.textContent);
+          button.textContent = "Copied";
+          status.textContent = "Copied the style URL to the clipboard.";
+          setTimeout(() => { button.textContent = "Copy"; }, 2000);
+        } catch {
+          getSelection().selectAllChildren(source);
+          status.textContent = "Press Ctrl+C or Cmd+C to copy the selected URL.";
+        }
+      });
+    }
+    const readVersion = (player) => fetch(player + "/version.json")
+      .then((r) => r.ok ? r.json() : null).catch(() => null)
+      .then((v) => v && v.version ? "v" + v.version + (typeof v.published === "string" ? ", published " + v.published.slice(0, 10) : "") : null);
+    Promise.all([readVersion("play"), readVersion("flythrough")]).then(([map, tour]) => {
+      const text = map && map === tour ? "Players " + map
+        : [map && "Map " + map, tour && "Flythrough " + tour].filter(Boolean).join(" · ");
+      if (text) document.getElementById("version").textContent = " · " + text;
+    });
+  </script>
+</body>
+</html>
